@@ -1,103 +1,159 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const properties = [
+  { name: 'Megaworld', img: '/images/megaworld.png' },
+  { name: 'Ayala', img: '/images/AYALA.png' },
+  { name: 'SMDC', img: '/images/SMDC.png' },
+  { name: 'DMCI', img: '/images/DMCI.png' },
+  { name: 'Robinsons', img: '/images/robinson.png' },
+  { name: 'Golden Topper', img: '/images/Golden Topper.png' },
+  { name: 'Prosperity Realty', img: '/images/ipos.jpg' },
+  { name: 'Vista Residences', img: '/images/Vista Land.png' },
+];
+
+export default function RealEstateListing() {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const itemsPerSlide = 8;
+  const totalSlides = Math.ceil(properties.length / itemsPerSlide);
+
+  const handleNext = () => {
+    setDirection(1);
+    setIndex((prev) => (prev + 1) % totalSlides);
+  };
+
+  const handlePrev = () => {
+    setDirection(-1);
+    setIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
+
+  const goToSlide = (i) => {
+    setDirection(i > index ? 1 : -1);
+    setIndex(i);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [index]);
+
+  const currentItems = properties.slice(
+    index * itemsPerSlide,
+    index * itemsPerSlide + itemsPerSlide
+  );
+
+  while (currentItems.length < itemsPerSlide) {
+    currentItems.push({ name: '', img: '' });
+  }
+
+  const variants = {
+    enter: (direction) => ({ x: direction > 0 ? 100 : -100, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (direction) => ({ x: direction < 0 ? 100 : -100, opacity: 0 }),
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-white px-6 py-12 sm:px-16">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-12">
+        <h1 className="text-xl font-bold text-amber-400">INSPIRE REAL ESTATE</h1>
+        <div className="space-x-4">
+          <button className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">
+            Log In
+          </button>
+          <button className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">
+            Register
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </header>
+
+      {/* Title */}
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-serif font-bold text-black mb-2">
+          REAL ESTATE LISTING
+        </h2>
+        <p className="text-gray-600">Trusted developers & property partners</p>
+      </div>
+
+      {/* Carousel */}
+      <div className="relative max-w-7xl mx-auto">
+        <div className="overflow-hidden relative h-[400px]">
+          <AnimatePresence custom={direction} initial={false}>
+            <motion.div
+              key={index}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="absolute inset-0 grid grid-cols-2 md:grid-cols-4 gap-6"
+            >
+              {currentItems.map((item, idx) => (
+                <motion.div
+                  key={`${index}-${idx}`}
+                  whileHover={{ y: -10 }}
+                  className="rounded-xl overflow-hidden shadow bg-white "
+                >
+                  {item.img ? (
+                    <div className="relative h-48 w-full">
+                      <Image
+                        src={item.img}
+                        alt={item.name}
+                        fill
+                        className="object-contain p-4"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-48 bg-gray-100 flex items-center justify-center">
+                      <span className="text-gray-400">Coming Soon</span>
+                    </div>
+                  )}
+                  {item.name && (
+                    <div className="p-7 text-center">
+                      <h3 className="font-semibold text-amber-800">{item.name}</h3>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Arrows */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <ChevronLeft className="w-6 h-6 text-amber-700" />
+        </button>
+        <button
+          onClick={handleNext}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow hover:bg-gray-100"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <ChevronRight className="w-6 h-6 text-amber-700" />
+        </button>
+      </div>
+
+      {/* Dots */}
+      <div className="flex justify-center mt-6 space-x-2">
+        {Array.from({ length: totalSlides }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goToSlide(i)}
+            className={`w-3 h-3 rounded-full transition-all ${
+              index === i ? 'bg-black w-6' : 'bg-gray-400'
+            }`}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        ))}
+      </div>
     </div>
   );
 }
