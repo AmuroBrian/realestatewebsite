@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { auth } from './script/firebaseConfig';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import RegisterModal from './dashboard/signup';
+import LoginModal from './dashboard/login';
 
 const properties = [
   { name: 'Megaworld', img: '/images/megaworld.png' },
@@ -19,6 +23,30 @@ const properties = [
 export default function RealEstateListing() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [showLogoutSuccess, setShowLogoutSuccess] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    setShowLogoutSuccess(false);
+    setTimeout(async () => {
+      await signOut(auth);
+      setIsLoggingOut(false);
+      setShowLogoutSuccess(true);
+      setTimeout(() => setShowLogoutSuccess(false), 1500);
+    }, 600);
+  };
+
   const itemsPerSlide = 8;
   const totalSlides = Math.ceil(properties.length / itemsPerSlide);
 
@@ -42,6 +70,7 @@ export default function RealEstateListing() {
       handleNext();
     }, 5000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line
   }, [index]);
 
   const currentItems = properties.slice(
@@ -64,13 +93,83 @@ export default function RealEstateListing() {
       {/* Header */}
       <header className="flex justify-between items-center mb-12">
         <h1 className="text-xl font-bold text-amber-400">INSPIRE REAL ESTATE</h1>
-        <div className="space-x-4">
-          <button className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">
-            Log In
-          </button>
-          <button className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">
-            Register
-          </button>
+        <div className="space-x-4 min-h-[40px] flex items-center">
+          <AnimatePresence mode="wait">
+            {user ? (
+              <motion.div
+                key="user-info"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45 }}
+                className="flex items-center space-x-4"
+              >
+                <motion.span
+                  className="text-amber-700 font-medium"
+                  animate={isLoggingOut ? { x: -20, opacity: 0 } : { x: 0, opacity: 1 }}
+                  transition={{ duration: 0.45 }}
+                >
+                  {user.displayName || user.email.split('@')[0]}
+                </motion.span>
+                <motion.button
+                  onClick={handleLogout}
+                  className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={isLoggingOut ? {
+                      x: 25,
+                      opacity: 0,
+                      backgroundColor: "#f59e0b80"
+                    } : {
+                      x: 0,
+                      opacity: 1,
+                      backgroundColor: "#d97706"
+                    }}
+                  transition={{ duration: 0.45 }}
+                  disabled={isLoggingOut}
+                >
+                  {isLoggingOut ? 'Logging out...' : 'Logout'}
+                </motion.button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="auth-buttons"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45 }}
+                className="flex space-x-4"
+              >
+                <button
+                  onClick={() => setIsLoginOpen(true)}
+                  className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700"
+                >
+                  Log In
+                </button>
+                <button
+                  onClick={() => setIsRegisterOpen(true)}
+                  className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700"
+                >
+                  Register
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          {/* Logout Success Animation */}
+          <AnimatePresence>
+            {showLogoutSuccess && (
+              <motion.div
+                key="logout-success"
+                initial={{ scale: 0.7, opacity: 0, x: 20 }}
+                animate={{ scale: 1, opacity: 1, x: 0 }}
+                exit={{ scale: 0.7, opacity: 0, x: 20 }}
+                transition={{ duration: 0.5 }}
+                className="ml-4 bg-green-500 text-white rounded px-4 py-2 shadow font-semibold"
+              >
+                Successfully logged out!
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </header>
 
@@ -100,7 +199,7 @@ export default function RealEstateListing() {
                 <motion.div
                   key={`${index}-${idx}`}
                   whileHover={{ y: -10 }}
-                  className="rounded-xl overflow-hidden shadow bg-white "
+                  className="rounded-xl overflow-hidden shadow bg-white"
                 >
                   {item.img ? (
                     <div className="relative h-48 w-full">
@@ -126,7 +225,6 @@ export default function RealEstateListing() {
             </motion.div>
           </AnimatePresence>
         </div>
-
         {/* Arrows */}
         <button
           onClick={handlePrev}
@@ -154,6 +252,19 @@ export default function RealEstateListing() {
           />
         ))}
       </div>
+
+      {/* Login Modal */}
+      <AnimatePresence>
+        {isLoginOpen && (
+          <LoginModal closeModal={() => setIsLoginOpen(false)} />
+        )}
+      </AnimatePresence>
+      {/* Register Modal */}
+      <AnimatePresence>
+        {isRegisterOpen && (
+          <RegisterModal closeModal={() => setIsRegisterOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
