@@ -3,31 +3,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function GentryFloorPlans() {
+  const router = useRouter();
   const plans = [
     {
       title: 'Location Map',
       image: '/images/Arcoviamap.jpg',
       link: '/images/Arcoviamap.jpg',
-     
-
     },
     {
       title: 'Location Map',
       image: '/images/Arcoviamap1.jpg',
       link: '/images/Arcoviamap1.jpg',
-     
-
     },
-     {
+    {
       title: 'Location Map',
       image: '/images/Arcoviamap2.jpg',
       link: '/images/Arcoviamap2.jpg',
-     
-
     }
-
   ];
 
   // Animation variants
@@ -47,9 +42,24 @@ export default function GentryFloorPlans() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-amber-50 to-orange-100 px-6 py-16 sm:px-12 lg:px-24">
+    <div className="bg-gradient-to-b from-amber-50 to-orange-100 px-6 py-16 sm:px-12 lg:px-24 relative min-h-screen">
+      {/* Back Button - Top Left */}
+      <motion.button 
+        onClick={() => router.back()}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        className="absolute top-6 left-6 z-10 flex items-center gap-2 bg-white hover:bg-amber-50 text-amber-700 hover:text-amber-900 px-4 py-2 rounded-lg shadow-sm transition-all duration-300 border border-amber-200"
+        aria-label="Go back"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+        </svg>
+        <span className="font-medium">Back</span>
+      </motion.button>
+
       {/* Header Section */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-16 pt-8">
         <motion.h2 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -83,7 +93,6 @@ export default function GentryFloorPlans() {
             className="group"
           >
             <Link href={plan.link} className="block h-full">
-            
               <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 group-hover:shadow-2xl h-full flex flex-col">
                 {/* Image Container with Shine Effect */}
                 <div className="relative h-64 overflow-hidden">
@@ -102,33 +111,23 @@ export default function GentryFloorPlans() {
 
                 {/* Content */}
                 <div className="p-6 flex-grow flex flex-col">
-                  
                   <h3 className="text-xl font-bold text-green-800 mb-2">{plan.title}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{plan.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-amber-600 font-medium">Click to for more information</span>
-                    
+                    <span className="text-sm text-amber-600 font-medium">Click for more information</span>
                     <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                     
+                      {/* Optional: Add icon here */}
                     </div>
                   </div>
                 </div>
               </div>
-              
             </Link>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Call to Action */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="text-center mt-16"
-      >
-      
-      </motion.div>
+      {/* Optional Footer Space */}
+      <div className="mt-16"></div>
     </div>
   );
 }

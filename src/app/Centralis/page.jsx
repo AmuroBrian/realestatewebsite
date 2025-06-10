@@ -3,8 +3,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+
+
 
 export default function GentryFloorPlans() {
+  const router = useRouter();
   const plans = [
    
     {
@@ -69,6 +73,21 @@ export default function GentryFloorPlans() {
   };
 
   return (
+    <div className="bg-gradient-to-b from-amber-50 to-orange-100 px-6 py-16 sm:px-12 lg:px-24 relative min-h-screen">
+      {/* Back Button - Top Left */}
+      <motion.button 
+        onClick={() => router.back()}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        className="absolute top-6 left-6 z-10 flex items-center gap-2 bg-white hover:bg-amber-50 text-amber-700 hover:text-amber-900 px-4 py-2 rounded-lg shadow-sm transition-all duration-300 border border-amber-200"
+        aria-label="Go back"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+        </svg>
+        <span className="font-medium">Back</span>
+      </motion.button>
     <div className="bg-gradient-to-b from-amber-50 to-orange-100 px-6 py-16 sm:px-12 lg:px-24">
       {/* Header Section */}
       <div className="text-center mb-16">
@@ -151,6 +170,7 @@ export default function GentryFloorPlans() {
       >
       
       </motion.div>
+    </div>
     </div>
   );
 }
