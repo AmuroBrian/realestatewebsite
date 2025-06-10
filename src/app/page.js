@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useState } from 'react';
+
 import { FaRobot, FaEnvelope, FaInstagram, FaFacebookF, FaTiktok, FaChevronRight } from "react-icons/fa";
 
 const DEVELOPERS = [
@@ -14,6 +16,7 @@ const DEVELOPERS = [
     description: 'Premier township developer with iconic projects',
     featured: true,
     accentColor: 'from-purple-600 to-blue-500'
+    
   },
   { 
     name: 'Ayala Land', 
@@ -23,8 +26,9 @@ const DEVELOPERS = [
     featured: true,
     accentColor: 'from-green-600 to-emerald-500'
   },
+  
   { 
-    name: 'Rockwell', 
+    name: 'Rockwell Land', 
     logo: '/images/rockwell.jpg', 
     url: '/Rockwell',
     description: 'Sophisticated urban living at its finest',
@@ -44,6 +48,7 @@ const DEVELOPERS = [
     description: 'Historic developer with prime properties',
     accentColor: 'from-amber-600 to-orange-500'
   },
+  
 ];
 
 export default function RealEstateListing() {
@@ -51,13 +56,16 @@ export default function RealEstateListing() {
 
   const featuredDevelopers = DEVELOPERS.filter(dev => dev.featured);
   const otherDevelopers = DEVELOPERS.filter(dev => !dev.featured);
+const [isLoading, setIsLoading] = useState(false);
 
-  const navigateToDeveloper = (url) => {
-    if (url !== '#') {
+ const navigateToDeveloper = (url) => {
+  if (url !== '#') {
+    setIsLoading(true);
+    setTimeout(() => {
       router.push(url);
-    }
-  };
-
+    }, 1000); // Delay just so the modal shows visibly
+  }
+};
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
       {/* Navigation Header */}
@@ -92,6 +100,33 @@ export default function RealEstateListing() {
           </div>
         </div>
       </header>
+{isLoading && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
+    <div className="min-w-40 h-32 bg-white rounded-lg flex items-center justify-center shadow-lg animate-pulse px-6 gap-4">
+      <svg
+        className="animate-spin h-10 w-10 text-amber-600"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        ></circle>
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 01-8 8z"
+        ></path>
+      </svg>
+      <p className="text-gray-700 font-medium">Please wait...</p> {/* Added text */}
+    </div>
+  </div>
+)}
+
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
@@ -158,7 +193,7 @@ export default function RealEstateListing() {
                         />
                       </div>
                     ) : (
-                      <div className="text-gray-400 text-xl">Coming Soon</div>
+                      <div className="text-gray-400 text-xl"></div>
                     )}
                   </div>
                   <div className="w-full lg:w-1/2 p-8 flex flex-col justify-center">
@@ -246,92 +281,159 @@ export default function RealEstateListing() {
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Our expert agents will help you find the perfect property from these trusted developers.
           </p>
+          <h2 className="text-3xl font-bold mb-1">Visit our Office!</h2>
         </div>
       </section>
+{/* Map Section */}
+<section className="relative w-full h-150">
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.7467403328874!2d121.05216417414886!3d14.55647017815748!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c8f53cd592f5%3A0x551030a34dbd4ca6!2sAlliance%20Global%20Tower!5e0!3m2!1sen!2sph!4v1749456116863!5m2!1sen!2sph" 
+    className="w-full h-full border-0"
+    allowFullScreen=""
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+  ></iframe>
+</section>
 
-      {/* Footer */}
-      <footer className="bg-orange-200 px-6 py-20 md:px-16 text-black">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-black pb-10">
-          {/* FAQs */}
-          <div className="border-l-0 md:border-l-2 border-black md:pl-8">
-            <h2 className="text-2xl font-semibold mb-4">FAQs</h2>
-            <ul className="space-y-4">
-              <li className="cursor-pointer hover:underline">Is there a best time of year to buy a home?</li>
-              <li className="cursor-pointer hover:underline">How much should I save for a downpayment?</li>
-              <li className="cursor-pointer hover:underline">Do you work with clients in different timezones?</li>
-            </ul>
-          </div>
 
-          {/* Contact Info + Office Hours */}
-          <div className="flex flex-col gap-8">
+
+     {/* Footer */}
+     
+ <footer className="bg-amber-600 px-6 py-20">
+  <div className="container mx-auto">
+    {/* FAQ + Contact Section */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-[#333] pb-16">
+      
+      {/* FAQs */}
+      <div className="md:border-l-2 border-[#d5ae85] md:pl-8">
+        <h2 className="text-2xl font-semibold mb-6 hover:text-amber-400 transition-colors">FAQs</h2>
+        <ul className="space-y-4">
+          {[
+            "Is there a best time of year to buy a home?",
+            "How much should I save for a downpayment?",
+            "Do you work with international clients?",
+            "What makes your service different?"
+          ].map((question, idx) => (
+            <motion.li 
+              key={idx}
+              whileHover={{ x: 5 }}
+              className="cursor-pointer hover:text-amber-400 transition-colors flex items-center"
+            >
+              <FaChevronRight className="mr-3 text-amber-400 text-xs" />
+              {question}
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+
+
+      {/* Contact Info, Office Hours, Work Address */}
+      <div className="flex flex-col gap-8">
+        
+        {/* Contact Info */}
+        <div>
+          <h3 className="text-2xl font-semibold mb-4 hover:text-amber-400 transition-colors">Contact Us</h3>
+          <div className="flex items-start mb-4">
+            <FaEnvelope className="text-amber-400 mt-1 mr-4" />
             <div>
-              <h3 className="text-2xl font-semibold mb-2">Contact Us</h3>
-              <p className="text-lg hover:underline">info@inspireholdings.ph</p>
-              <p className="text-lg hover:underline">inspirenextglobal@gmail.com</p>
-            </div>
-
-            <div className="border-l-0 md:border-l-2 border-black md:pl-8">
-              <h3 className="text-2xl font-semibold mb-2">Office Hours</h3>
-              <p className="text-lg hover:underline">Mon - Fri: 7:00 AM - 10:00 PM</p>
-              <p className="text-lg hover:underline">Weekend: Email us anytime!</p>
+              <p className="text-lg hover:text-amber-300 transition-colors">info@inspireholdings.ph</p>
+              <p className="text-lg hover:text-amber-300 transition-colors">inspirenextglobal@gmail.com</p>
             </div>
           </div>
         </div>
 
-        {/* Footer Links & Social Icons */}
-        <div className="mt-10 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-black pt-10 text-sm">
-          {/* Quick Links */}
-          <div className="flex flex-wrap gap-6">
-            <a href="https://inspireholdings.ph/home" className="hover:underline">Work</a>
-            <a href="https://inspireholdings.ph/upcoming-projects" className="hover:underline">Services</a>
-            <a href="https://inspireholdings.ph/seminar-1" className="hover:underline">Blog</a>
-            <a href="https://inspireholdings.ph/home" className="hover:underline">About</a>
-          </div>
-
-          {/* Social Links */}
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            {/* Inspire Holdings */}
-            <ul className="flex items-center gap-4">
-              <li className="font-semibold">Inspire Holdings Inc.</li>
-              <li>
-                <a href="https://www.instagram.com/inspire.holdings.inc/" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500">
-                  <FaInstagram />
-                </a>
-              </li>
-              <li>
-                <a href="https://web.facebook.com/inspireholdings" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500">
-                  <FaFacebookF />
-                </a>
-              </li>
-              <li>
-                <a href="https://www.tiktok.com/@inspire.holdings" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500">
-                  <FaTiktok />
-                </a>
-              </li>
-            </ul>
-
-            {/* Inspire Next Global */}
-            <ul className="flex items-center gap-4">
-              <li className="font-semibold">Inspire Next Global Inc.</li>
-              <li>
-                <a href="https://www.instagram.com/inspirenextglobal_inc/" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500">
-                  <FaInstagram />
-                </a>
-              </li>
-              <li>
-                <a href="https://web.facebook.com/inspirenextglobalinc" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500">
-                  <FaFacebookF />
-                </a>
-              </li>
-              <li>
-                <a href="https://www.tiktok.com/@inspirenextglobal" target="_blank" rel="noopener noreferrer" className="hover:text-amber-500">
-                  <FaTiktok />
-                </a>
-              </li>
-            </ul>
-          </div>
+        {/* Office Hours */}
+        <div className="md:border-l-2 border-[#d5ae85] md:pl-8">
+          <h3 className="text-2xl font-semibold mb-4 hover:text-amber-400 transition-colors">Office Hours</h3>
+          <p className="text-lg">Monday to Friday: 7:00 AM - 10:00 PM</p>
+          <p className="text-lg">Weekends: Email inquiries only</p>
         </div>
-      </footer>
+
+        {/* Work Address */}
+        <div className="md:border-l-2 border-[#d5ae85] md:pl-8">
+          <h3 className="text-2xl font-semibold mb-4 hover:text-amber-400 transition-colors">Work Address</h3>
+          <p className="text-lg">MAIN OFFICE: 6F Alliance Global Tower, 11th Avenue, corner 36th St, Taguig, Metro Manila</p>
+          <p className="text-lg">SATELLITE OFFICE:
+1209 Mountain Road PL NE STE N Bernalillo County Albuquerque, NM, 87110, USA</p>
+          <p className="text-lg">SATELLITE OFFICE:
+20th floor, Trust Tower Main Building, 1-8-3 Marunouchi, Chiyoda-ku, Tokyo 100-8283</p>
+        </div>
+
+      </div>
     </div>
+
+    {/* Footer Links & Socials */}
+    <div className="flex flex-col md:flex-row justify-between items-center pt-12 gap-6">
+      
+      {/* Links */}
+      <div className="flex flex-wrap gap-6">
+        {['Work', 'Services', 'Blog', 'About'].map((item, idx) => (
+          <motion.a 
+            key={idx}
+            whileHover={{ scale: 1.05 }}
+            href="#" 
+            className="hover:text-amber-400 transition-colors"
+          >
+            {item}
+          </motion.a>
+        ))}
+      </div>
+
+      {/* Social Links */}
+      <div className="flex flex-col md:flex-row gap-10">
+        
+        {/* Inspire Holdings */}
+        <div className="flex flex-col items-center md:items-start">
+          <h4 className="font-medium mb-3">Inspire Holdings Inc.</h4>
+          <div className="flex space-x-4 text-xl">
+            {[
+              { icon: <FaInstagram />, url: "https://www.instagram.com/inspire.holdings.inc/" },
+              { icon: <FaFacebookF />, url: "https://web.facebook.com/inspireholdings" },
+              { icon: <FaTiktok />, url: "https://www.tiktok.com/@inspire.holdings" }
+            ].map((social, idx) => (
+              <motion.a 
+                key={idx}
+                whileHover={{ y: -3 }}
+                href={social.url} 
+                target="_blank" 
+                className="hover:text-amber-400 transition-colors"
+              >
+                {social.icon}
+              </motion.a>
+            ))}
+          </div>
+        </div>
+
+        {/* Inspire Next Global */}
+        <div className="flex flex-col items-center md:items-start">
+          <h4 className="font-medium mb-3">Inspire Next Global Inc.</h4>
+          <div className="flex space-x-4 text-xl">
+            {[
+              { icon: <FaInstagram />, url: "https://www.instagram.com/inspirenextglobal_inc/" },
+              { icon: <FaFacebookF />, url: "https://web.facebook.com/inspirenextglobalinc" },
+              { icon: <FaTiktok />, url: "https://www.tiktok.com/@inspirenextglobal" }
+            ].map((social, idx) => (
+              <motion.a 
+                key={idx}
+                whileHover={{ y: -3 }}
+                href={social.url} 
+                target="_blank" 
+                className="hover:text-amber-400 transition-colors"
+              >
+                {social.icon}
+              </motion.a>
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* Copyright */}
+    <div className="text-center mt-8 pt-6 border-t border-amber-500/30 text-amber-100 text-sm">
+      <p>© {new Date().getFullYear()} Inspire Holdings Inc. All rights reserved.</p>
+    </div>
+  </div>
+  </div>
+</footer>
+    </div>
+
   );
 };
