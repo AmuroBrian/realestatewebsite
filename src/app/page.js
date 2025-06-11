@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-import { FaRobot, FaEnvelope, FaInstagram, FaFacebookF, FaTiktok, FaChevronRight, FaSignOutAlt, FaCog } from "react-icons/fa";
+import { FaRobot, FaEnvelope, FaInstagram, FaFacebookF, FaTiktok, FaChevronRight, FaSignOutAlt, FaCog, FaBars, FaTimes } from "react-icons/fa"; // Added FaBars and FaTimes
 
 // Import all modal components
 import LoginModal from './dashboard/LoginModal';
@@ -69,6 +69,7 @@ export default function RealEstateListing() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // New state for mobile menu
 
   // States for the custom Alert Modal
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
@@ -131,20 +132,27 @@ export default function RealEstateListing() {
   const openLoginModal = () => {
     setIsSignupModalOpen(false);
     setIsLoginModalOpen(true);
+    setIsMobileMenuOpen(false); // Close mobile menu when opening modal
   };
   const closeLoginModal = () => setIsLoginModalOpen(false);
 
   const openSignupModal = () => {
     setIsLoginModalOpen(false);
     setIsSignupModalOpen(true);
+    setIsMobileMenuOpen(false); // Close mobile menu when opening modal
   };
   const closeSignupModal = () => setIsSignupModalOpen(false);
 
   const openSettingsModal = () => {
     setIsSettingsModalOpen(true);
+    setIsMobileMenuOpen(false); // Close mobile menu when opening modal
   };
   const closeSettingsModal = () => {
     setIsSettingsModalOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   // --- Logout Function using the custom Alert Modal ---
@@ -153,6 +161,7 @@ export default function RealEstateListing() {
       await signOut(auth);
       showAlert('You have been logged out successfully.', 'success'); // Use custom alert
       router.push('/'); // Redirect to home page after logout
+      setIsMobileMenuOpen(false); // Close mobile menu on logout
     } catch (error) {
       console.error("Error logging out:", error);
       showAlert('Failed to log out. Please try again.', 'error'); // Use custom alert for errors
@@ -173,15 +182,25 @@ export default function RealEstateListing() {
               INSPIRE REAL ESTATE
             </h1>
           </motion.div>
-          <div className="flex items-center space-x-4">
-            {/* Conditional Rendering based on currentUser */}
+
+          {/* Hamburger menu button for mobile */}
+          <div className="md:hidden">
+            <button
+              onClick={toggleMobileMenu}
+              className="text-gray-700 hover:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-md p-2"
+              aria-label="Toggle navigation menu"
+            >
+              {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </button>
+          </div>
+
+          {/* Desktop navigation */}
+          <div className="hidden md:flex items-center space-x-4">
             <AnimatePresence mode="wait">
               {currentUser ? (
-                // If logged in, show user's name, settings button, and logout button
                 <motion.div
                   key="loggedIn"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, x: 20 }}animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
                   className="flex items-center space-x-4"
@@ -205,7 +224,6 @@ export default function RealEstateListing() {
                   </motion.button>
                 </motion.div>
               ) : (
-                // If not logged in, show login and register buttons
                 <motion.div
                   key="loggedOut"
                   initial={{ opacity: 0, x: -20 }}
@@ -235,6 +253,62 @@ export default function RealEstateListing() {
             </AnimatePresence>
           </div>
         </div>
+
+        {/* Mobile menu content */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden bg-white/90 backdrop-blur-md shadow-inner py-4 px-6"
+            >
+              <div className="flex flex-col space-y-4 items-center">
+                {currentUser ? (
+                  <>
+                    <span className="text-gray-700 font-semibold text-lg">Hello, {userName}!</span>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md transition-all shadow hover:shadow-md w-full justify-center"
+                      onClick={openSettingsModal}
+                    >
+                      <FaCog className="mr-2" /> Settings
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-all shadow hover:shadow-md w-full justify-center"
+                      onClick={handleLogout}
+                    >
+                      <FaSignOutAlt className="mr-2" /> Log Out
+                    </motion.button>
+                  </>
+                ) : (
+                  <>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-4 py-2 rounded-md text-amber-700 hover:bg-amber-100 transition-all w-full justify-center"
+                      onClick={openLoginModal}
+                    >
+                      Log In
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white px-6 py-2 rounded-md transition-all shadow hover:shadow-md w-full justify-center"
+                      onClick={openSignupModal}
+                    >
+                      Register
+                    </motion.button>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
       {isLoading && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
@@ -263,11 +337,11 @@ export default function RealEstateListing() {
         </div>
       )}
 
-      {/* Login Modal */}
+      {/* Login Modal /}
       <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} showAlert={showAlert} />
-      {/* Signup Modal */}
-      <SignupModal isOpen={isSignupModalOpen} onClose={closeSignupModal} showAlert={showAlert} /> {/* Pass showAlert to SignupModal as well */}
-      {/* Settings Modal */}
+      {/ Signup Modal /}
+      <SignupModal isOpen={isSignupModalOpen} onClose={closeSignupModal} showAlert={showAlert} /> {/ Pass showAlert to SignupModal as well /}
+      {/ Settings Modal */}
       <SettingsModal isOpen={isSettingsModalOpen} onClose={closeSettingsModal} />
 
       {/* Custom Alert Modal */}
@@ -469,7 +543,7 @@ export default function RealEstateListing() {
                 ))}
               </ul>
             </div>
-
+ </div>
             {/* Contact Info, Office Hours, Work Address */}
             <div className="flex flex-col gap-8">
 
@@ -547,7 +621,7 @@ export default function RealEstateListing() {
                 </div>
               </div>
 
-              {/* Inspire Next Global */}
+              {/* Inspire Next Global /}
               <div className="flex flex-col items-center md:items-start">
                 <h4 className="font-medium mb-3">Inspire Next Global Inc.</h4>
                 <div className="flex space-x-4 text-xl">
@@ -569,7 +643,7 @@ export default function RealEstateListing() {
                 </div>
               </div>
             </div>
-            {/* Copyright */}
+            {/ Copyright */}
             <div className="text-center mt-8 pt-6 border-t border-amber-500/30 text-amber-100 text-sm">
               <p>© {new Date().getFullYear()} Inspire Holdings Inc. All rights reserved.</p>
             </div>
@@ -578,4 +652,4 @@ export default function RealEstateListing() {
       </footer>
     </div>
   );
-};
+}
