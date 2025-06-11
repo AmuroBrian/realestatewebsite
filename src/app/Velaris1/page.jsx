@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 
 export default function GentryFloorPlans() {
   const router = useRouter();
+  
   const plans = [
     {
       title: 'Location Map',

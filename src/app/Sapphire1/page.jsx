@@ -68,7 +68,7 @@ export default function GentryFloorPlans() {
           transition={{ duration: 0.5 }}
           className="text-4xl md:text-5xl font-bold text-green-800 mb-4 font-serif"
         >
-          Sierra Valley Garden Informations
+          The Sapphire Bloc Informations
         </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
