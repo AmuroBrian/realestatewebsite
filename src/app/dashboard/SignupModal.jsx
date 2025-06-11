@@ -2,7 +2,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react'; // Import useEffect
+import { useState, useEffect } from 'react';
 import { FaTimes, FaUser, FaEnvelope, FaLock, FaBuilding, FaRoad, FaVenusMars, FaCalendarAlt } from 'react-icons/fa';
 import Link from 'next/link';
 
@@ -38,10 +38,10 @@ const SignupModal = ({ isOpen, onClose }) => {
       setPassword('');
       setConfirmPassword('');
       setError('');      // Clear error message
-      setSuccess('');    // Clear success message
+      setSuccess('');     // Clear success message
       setIsSubmitting(false); // Reset submitting state
     }
-  }, [isOpen]); // Re-run this effect whenever the 'isOpen' prop changes
+  }, [isOpen]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,34 +62,29 @@ const SignupModal = ({ isOpen, onClose }) => {
     }
 
     try {
-      // 1. Create user with email and password using Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log('User registered:', user);
 
-      // 2. Store additional user details in Firestore
       await addDoc(collection(db, 'users'), {
-        uid: user.uid, // Store the Firebase Auth UID
+        uid: user.uid,
         firstName,
         lastName,
-        agentNumber: agentNumber || null, // Store as null if empty
+        agentNumber: agentNumber || null,
         address,
         gender,
-        age: parseInt(age, 10), // Convert age to a number
-        email: user.email, // Use the email from Firebase Auth
-        registrationDate: new Date(), // Add a timestamp
+        age: parseInt(age, 10),
+        email: user.email,
+        registrationDate: new Date(),
       });
 
       setSuccess('Registration successful! You can now log in.');
-      // Form fields are now cleared by the useEffect when onClose is called
-      // No need to manually clear them here anymore
 
       setTimeout(() => {
-        onClose(); // Close modal after a short delay on success
+        onClose();
       }, 1500);
 
     } catch (firebaseError) {
-      // Handle Firebase errors
       console.error('Firebase registration error:', firebaseError);
       let errorMessage = 'Registration failed. Please try again.';
 
@@ -125,14 +120,17 @@ const SignupModal = ({ isOpen, onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 bg-opacity-50 p-4 overflow-y-auto"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 bg-opacity-50 p-4 sm:p-6 md:p-8 overflow-y-auto"
           onClick={onClose}
         >
           <motion.div
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -50, opacity: 0 }}
-            className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg mx-auto relative transform transition-all duration-300 my-8"
+            // Adjusted classes for smaller size and guaranteed scrollability
+            // max-w-sm on small screens, max-w-md on medium, then max-w-lg on large
+            // max-h-[90vh] ensures it doesn't take up the full viewport height
+            className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-sm sm:max-w-md md:max-w-lg mx-auto relative transform transition-all duration-300 my-8 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -143,10 +141,10 @@ const SignupModal = ({ isOpen, onClose }) => {
               <FaTimes size={20} />
             </button>
 
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Create Your Account</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 sm:mb-8">Create Your Account</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                   <label htmlFor="firstName" className="block text-gray-700 text-sm font-semibold mb-2">
                     First Name
@@ -156,7 +154,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                     <input
                       type="text"
                       id="firstName"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                       placeholder="John"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
@@ -173,7 +171,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                     <input
                       type="text"
                       id="lastName"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                       placeholder="Doe"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
@@ -192,7 +190,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                   <input
                     type="text"
                     id="agentNumber"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                     placeholder="e.g., AGENT123"
                     value={agentNumber}
                     onChange={(e) => setAgentNumber(e.target.value)}
@@ -209,7 +207,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                   <input
                     type="text"
                     id="address"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                     placeholder="123 Main St, City, Country"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
@@ -218,7 +216,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                   <label htmlFor="gender" className="block text-gray-700 text-sm font-semibold mb-2">
                     Gender
@@ -227,7 +225,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                     <FaVenusMars className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <select
                       id="gender"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all appearance-none text-black font-bold"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all appearance-none text-black font-bold text-sm sm:text-base"
                       value={gender}
                       onChange={(e) => setGender(e.target.value)}
                       required
@@ -248,7 +246,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                     <input
                       type="number"
                       id="age"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                       placeholder="e.g., 30"
                       value={age}
                       onChange={(e) => setAge(e.target.value)}
@@ -268,7 +266,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                   <input
                     type="email"
                     id="email"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                     placeholder="your@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -286,7 +284,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                   <input
                     type="password"
                     id="password"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -304,7 +302,7 @@ const SignupModal = ({ isOpen, onClose }) => {
                   <input
                     type="password"
                     id="confirmPassword"
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all text-black font-bold text-sm sm:text-base"
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -320,9 +318,8 @@ const SignupModal = ({ isOpen, onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white font-semibold py-3 rounded-md shadow-lg hover:from-amber-700 hover:to-amber-800 transition-all duration-200 flex items-center justify-center"
-                disabled={isSubmitting}
-              >
+                className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white font-semibold py-3 rounded-md shadow-lg hover:from-amber-700 hover:to-amber-800 transition-all duration-200 flex items-center justify-center text-base sm:text-lg"
+                disabled={isSubmitting}>
                 {isSubmitting ? (
                   <svg className="animate-spin h-5 w-5 text-white mr-3" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -338,7 +335,7 @@ const SignupModal = ({ isOpen, onClose }) => {
               </motion.button>
             </form>
 
-            <p className="text-center text-gray-600 text-sm mt-8">
+            <p className="text-center text-gray-600 text-xs sm:text-sm mt-6 sm:mt-8">
               Already have an account?{' '}
               <Link href="#" className="text-amber-600 hover:underline" onClick={onClose}>
                 Log In
