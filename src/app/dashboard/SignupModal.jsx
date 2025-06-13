@@ -181,7 +181,8 @@ const SignupModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div><label htmlFor="agentNumber" className="block text-gray-700 text-sm font-semibold mb-2">
+              <div>
+                <label htmlFor="agentNumber" className="block text-gray-700 text-sm font-semibold mb-2">
                   Agent # (Optional)
                 </label>
                 <div className="relative">
