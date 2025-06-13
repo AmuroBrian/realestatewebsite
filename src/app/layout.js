@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Inspire Real Estate",
-  description: "Inspire Real Estate is a forward-thinking real estate agency dedicated to helping clients find their dream homes and investment properties with expert guidance and personalized service.",
+  description: "Inspire Real Estate is a forward-thinking real estate agency dedicated to helping clients find their dream homes and investment properties with expert guidance and personalized services.",
 };
 
 export default function RootLayout({ children }) {
