@@ -517,14 +517,14 @@ export default function RealEstateListing() {
         ></iframe>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-amber-600 px-6 py-20 text-white">
+      {/* Premium Footer */}
+      <footer className="bg-amber-600 px-6 py-20">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-amber-500 pb-16">
-
+          {/* FAQ + Contact Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-[#333] pb-16">
             {/* FAQs */}
-            <div className="md:border-l-2 border-amber-500 md:pl-8">
-              <h2 className="text-2xl font-semibold mb-6 hover:text-amber-300 transition-colors">FAQs</h2>
+            <div className="md:border-l-2 border-[#d5ae85] md:pl-8">
+              <h2 className="text-2xl font-semibold mb-6 hover:text-amber-400 transition-colors">FAQs</h2>
               <ul className="space-y-4">
                 {[
                   "Is there a best time of year to buy a home?",
@@ -532,10 +532,10 @@ export default function RealEstateListing() {
                   "Do you work with international clients?",
                   "What makes your service different?"
                 ].map((question, idx) => (
-                  <motion.li
+                  <motion.li 
                     key={idx}
                     whileHover={{ x: 5 }}
-                    className="cursor-pointer hover:text-amber-300 transition-colors flex items-center"
+                    className="cursor-pointer hover:text-amber-400 transition-colors flex items-center"
                   >
                     <FaChevronRight className="mr-3 text-amber-400 text-xs" />
                     {question}
@@ -543,13 +543,11 @@ export default function RealEstateListing() {
                 ))}
               </ul>
             </div>
-</div>
-            {/* Contact Info, Office Hours, Work Address */}
-            <div className="flex flex-col gap-8">
 
-              {/* Contact Info */}
+            {/* Contact Info */}
+            <div className="flex flex-col gap-8">
               <div>
-                <h3 className="text-2xl font-semibold mb-4 hover:text-amber-300 transition-colors">Contact Us</h3>
+                <h3 className="text-2xl font-semibold mb-4 hover:text-amber-400 transition-colors">Contact Us</h3>
                 <div className="flex items-start mb-4">
                   <FaEnvelope className="text-amber-400 mt-1 mr-4" />
                   <div>
@@ -559,37 +557,29 @@ export default function RealEstateListing() {
                 </div>
               </div>
 
-              {/* Office Hours */}
-              <div className="md:border-l-2 border-amber-500 md:pl-8">
-                <h3 className="text-2xl font-semibold mb-4 hover:text-amber-300 transition-colors">Office Hours</h3>
+              <div className="md:border-l-2 border-[#d5ae85] md:pl-8">
+                <h3 className="text-2xl font-semibold mb-4 hover:text-amber-400 transition-colors">Office Hours</h3>
                 <p className="text-lg">Monday to Friday: 7:00 AM - 10:00 PM</p>
-                <p className="text-lg">Weekends: Email inquiries only</p>
-              </div>
-
-              {/* Work Address */}
-              <div className="md:border-l-2 border-amber-500 md:pl-8">
-                <h3 className="text-2xl font-semibold mb-4 hover:text-amber-300 transition-colors">Work Address</h3>
-                <p className="text-lg">MAIN OFFICE: 6F Alliance Global Tower, 11th Avenue, corner 36th St, Taguig, Metro Manila</p>
+                <p className="text-lg">Inspire Holdings Inc.
+MAIN OFFICE: 6F Alliance Global Tower, 11th Avenue, corner 36th St, Taguig, Metro Manila</p>
                 <p className="text-lg">SATELLITE OFFICE:
-                  1209 Mountain Road PL NE STE N Bernalillo County Albuquerque, NM, 87110, USA</p>
+1209 Mountain Road PL NE STE N Bernalillo County Albuquerque, NM, 87110, USA</p>
                 <p className="text-lg">SATELLITE OFFICE:
-                  20th floor, Trust Tower Main Building, 1-8-3 Marunouchi, Chiyoda-ku, Tokyo 100-8283</p>
+20th floor, Trust Tower Main Building, 1-8-3 Marunouchi, Chiyoda-ku, Tokyo 100-8283</p>
+            
               </div>
-
             </div>
           </div>
 
-          {/* Footer Links & Socials */}
+          {/* Footer Links */}
           <div className="flex flex-col md:flex-row justify-between items-center pt-12 gap-6">
-
-            {/* Links */}
             <div className="flex flex-wrap gap-6">
               {['Work', 'Services', 'Blog', 'About'].map((item, idx) => (
-                <motion.a
+                <motion.a 
                   key={idx}
                   whileHover={{ scale: 1.05 }}
-                  href="#"
-                  className="hover:text-amber-300 transition-colors"
+                  href="#" 
+                  className="hover:text-amber-400 transition-colors"
                 >
                   {item}
                 </motion.a>
@@ -598,8 +588,6 @@ export default function RealEstateListing() {
 
             {/* Social Links */}
             <div className="flex flex-col md:flex-row gap-10">
-
-              {/* Inspire Holdings */}
               <div className="flex flex-col items-center md:items-start">
                 <h4 className="font-medium mb-3">Inspire Holdings Inc.</h4>
                 <div className="flex space-x-4 text-xl">
@@ -608,12 +596,12 @@ export default function RealEstateListing() {
                     { icon: <FaFacebookF />, url: "https://web.facebook.com/inspireholdings" },
                     { icon: <FaTiktok />, url: "https://www.tiktok.com/@inspire.holdings" }
                   ].map((social, idx) => (
-                    <motion.a
+                    <motion.a 
                       key={idx}
                       whileHover={{ y: -3 }}
-                      href={social.url}
-                      target="_blank"
-                      className="hover:text-amber-300 transition-colors"
+                      href={social.url} 
+                      target="_blank" 
+                      className="hover:text-amber-400 transition-colors"
                     >
                       {social.icon}
                     </motion.a>
@@ -621,7 +609,6 @@ export default function RealEstateListing() {
                 </div>
               </div>
 
-              {/* Inspire Next Global /}
               <div className="flex flex-col items-center md:items-start">
                 <h4 className="font-medium mb-3">Inspire Next Global Inc.</h4>
                 <div className="flex space-x-4 text-xl">
@@ -630,12 +617,12 @@ export default function RealEstateListing() {
                     { icon: <FaFacebookF />, url: "https://web.facebook.com/inspirenextglobalinc" },
                     { icon: <FaTiktok />, url: "https://www.tiktok.com/@inspirenextglobal" }
                   ].map((social, idx) => (
-                    <motion.a
+                    <motion.a 
                       key={idx}
                       whileHover={{ y: -3 }}
-                      href={social.url}
-                      target="_blank"
-                      className="hover:text-amber-300 transition-colors"
+                      href={social.url} 
+                      target="_blank" 
+                      className="hover:text-amber-400 transition-colors"
                     >
                       {social.icon}
                     </motion.a>
@@ -643,13 +630,9 @@ export default function RealEstateListing() {
                 </div>
               </div>
             </div>
-            {/ Copyright */}
-            <div className="text-center mt-8 pt-6 border-t border-amber-500/30 text-amber-100 text-sm">
-              <p>© {new Date().getFullYear()} Inspire Holdings Inc. All rights reserved.</p>
-            </div>
           </div>
         </div>
       </footer>
     </div>
   );
-};
+}
