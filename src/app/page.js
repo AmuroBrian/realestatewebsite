@@ -543,7 +543,7 @@ export default function RealEstateListing() {
                 ))}
               </ul>
             </div>
- </div>
+</div>
             {/* Contact Info, Office Hours, Work Address */}
             <div className="flex flex-col gap-8">
 
@@ -652,4 +652,4 @@ export default function RealEstateListing() {
       </footer>
     </div>
   );
-}
+};

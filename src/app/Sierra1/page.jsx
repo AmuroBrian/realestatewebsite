@@ -5,9 +5,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
-
-
-
 export default function GentryFloorPlans() {
   const router = useRouter();
   const plans = [
@@ -25,7 +22,6 @@ export default function GentryFloorPlans() {
      
 
     },
-     
   ];
 
   // Animation variants
@@ -60,9 +56,9 @@ export default function GentryFloorPlans() {
         </svg>
         <span className="font-medium">Back</span>
       </motion.button>
-    <div className="bg-gradient-to-b from-amber-50 to-orange-100 px-6 py-16 sm:px-12 lg:px-24">
+
       {/* Header Section */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-16 pt-8">
         <motion.h2 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -86,7 +82,7 @@ export default function GentryFloorPlans() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="flex justify-center items-center gap-12 "
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12"
       >
         {plans.map((plan, index) => (
           <motion.div 
@@ -96,7 +92,6 @@ export default function GentryFloorPlans() {
             className="group"
           >
             <Link href={plan.link} className="block h-full">
-            
               <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 group-hover:shadow-2xl h-full flex flex-col">
                 {/* Image Container with Shine Effect */}
                 <div className="relative h-64 overflow-hidden">
@@ -114,35 +109,24 @@ export default function GentryFloorPlans() {
                 </div>
 
                 {/* Content */}
-                <div className="flex justify-center items-center p-8 gap-10">
-                  
+                <div className="p-6 flex-grow flex flex-col">
                   <h3 className="text-xl font-bold text-green-800 mb-2">{plan.title}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{plan.description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-amber-600 font-medium">Click to for more information</span>
-                    
+                    <span className="text-sm text-amber-600 font-medium">Click for more information</span>
                     <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                     
+                      {/* Optional: Add icon here */}
                     </div>
                   </div>
                 </div>
               </div>
-              
             </Link>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Call to Action */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="text-center mt-16"
-      >
-      
-      </motion.div>
+      {/* Optional Footer Space */}
+      <div className="mt-16"></div>
     </div>
-        </div>
   );
 }
