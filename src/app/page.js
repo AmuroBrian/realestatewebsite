@@ -559,12 +559,12 @@ export default function RealEstateListing() {
 
               <div className="md:border-l-2 border-[#d5ae85] md:pl-8">
                 <h3 className="text-2xl font-semibold mb-4 hover:text-amber-400 transition-colors">Office Hours</h3>
-                <p className="text-lg">Monday to Friday: 7:00 AM - 10:00 PM</p>
+                <p className="text-lg">Monday to Friday; 7:00 AM - 10:00 PM</p>
                 <p className="text-lg">Inspire Holdings Inc.
 MAIN OFFICE: 6F Alliance Global Tower, 11th Avenue, corner 36th St, Taguig, Metro Manila</p>
-                <p className="text-lg">SATELLITE OFFICE:
+                <p className="text-lg">SATELLITE OFFICE;
 1209 Mountain Road PL NE STE N Bernalillo County Albuquerque, NM, 87110, USA</p>
-                <p className="text-lg">SATELLITE OFFICE:
+                <p className="text-lg">SATELLITE OFFICE;
 20th floor, Trust Tower Main Building, 1-8-3 Marunouchi, Chiyoda-ku, Tokyo 100-8283</p>
             
               </div>
